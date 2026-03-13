@@ -1,213 +1,203 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Happy Birthday ❤️</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Arial', sans-serif;
-      background: #ffeff7;
-      overflow-x: hidden;
-      text-align: center;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday ❤️</title>
+<style>
+body {
+  margin:0;
+  font-family: 'Arial', sans-serif;
+  background: #ffeef7;
+  overflow-x: hidden;
+  text-align: center;
+}
 
-    /* Cake Section */
-    #cake {
-      margin-top: 50px;
-      font-size: 50px;
-      animation: fadeIn 2s ease-in-out;
-    }
+/* Cake in the middle at start */
+#cake {
+  position: relative;
+  top: 50px;
+  font-size: 60px;
+  opacity:0;
+  animation: fadeIn 3s forwards;
+}
 
-    /* Love letter */
-    #love-letter {
-      margin: 30px auto;
-      width: 90%;
-      max-width: 700px;
-      background: #fff0f5;
-      border-radius: 20px;
-      padding: 30px;
-      font-size: 22px;
-      color: #d6336c;
-      box-shadow: 0 0 30px rgba(255,0,100,0.3);
-      display: inline-block;
-      animation: fadeIn 3s ease-in-out;
-      line-height: 1.6;
-    }
+/* Love letter */
+#love-letter {
+  margin: 30px auto;
+  width: 90%;
+  max-width:700px;
+  background: #fff0f5;
+  border-radius:20px;
+  padding:30px;
+  font-size:22px;
+  color:#d6336c;
+  box-shadow:0 0 30px rgba(255,0,100,0.3);
+  display:inline-block;
+  opacity:0;
+  animation: fadeIn 6s forwards 3s;
+  line-height:1.6;
+}
 
-    /* Hearts */
-    .heart {
-      position: fixed;
-      width: 20px;
-      height: 20px;
-      background: red;
-      transform: rotate(45deg);
-      animation: floatUp 5s linear infinite;
-      z-index: 999;
-    }
-    .heart:before, .heart:after {
-      content: "";
-      position: absolute;
-      width: 20px;
-      height: 20px;
-      background: red;
-      border-radius: 50%;
-    }
-    .heart:before { top: -10px; left: 0; }
-    .heart:after { left: 10px; top: 0; }
+/* Floating hearts */
+.heart {
+  position: fixed;
+  width: 20px;
+  height: 20px;
+  background: red;
+  transform: rotate(45deg);
+  animation: floatUp 7s linear infinite;
+  z-index:999;
+}
+.heart:before, .heart:after {
+  content:"";
+  position:absolute;
+  width:20px;
+  height:20px;
+  background:red;
+  border-radius:50%;
+}
+.heart:before { top:-10px; left:0; }
+.heart:after { left:10px; top:0; }
 
-    @keyframes floatUp {
-      0% { transform: translateY(0) rotate(45deg); opacity:1; }
-      100% { transform: translateY(-800px) rotate(45deg); opacity:0; }
-    }
+@keyframes floatUp {
+  0% {transform: translateY(0) rotate(45deg); opacity:1;}
+  100% {transform: translateY(-900px) rotate(45deg); opacity:0;}
+}
 
-    /* Fireworks */
-    #fireworks {
-      position: fixed;
-      top:0; left:0;
-      width: 100%; height: 100%;
-      pointer-events: none;
-      z-index: 998;
-    }
+/* Fireworks canvas */
+#fireworks {
+  position:fixed;
+  top:0; left:0;
+  width:100%; height:100%;
+  pointer-events:none;
+  z-index:998;
+}
 
-    /* Photo gallery */
-    #photo-gallery {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      justify-content: center;
-      margin: 30px auto;
-    }
-    #photo-gallery img {
-      width: 200px;
-      height: auto;
-      border-radius: 10px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.2);
-      transition: transform 0.3s;
-    }
-    #photo-gallery img:hover {
-      transform: scale(1.05);
-    }
+/* Photo gallery */
+#photo-gallery {
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  justify-content:center;
+  margin:30px auto;
+  opacity:0;
+  animation: fadeIn 5s forwards 9s; /* fade in after love letter */
+}
+#photo-gallery img {
+  width:200px;
+  height:auto;
+  border-radius:10px;
+  box-shadow:0 0 15px rgba(0,0,0,0.2);
+  transition: transform 0.5s;
+}
+#photo-gallery img:hover {transform:scale(1.05);}
 
-    @keyframes fadeIn { from {opacity:0;} to {opacity:1;} }
-
-  </style>
+/* Fade-in animation */
+@keyframes fadeIn { from{opacity:0;} to{opacity:1;} }
+</style>
 </head>
 <body>
 
-  <!-- Cake -->
-  <div id="cake">🎂 Happy Birthday, My Love! 🎂</div>
+<!-- Fireworks Canvas -->
+<canvas id="fireworks"></canvas>
 
-  <!-- Love Letter -->
-  <div id="love-letter">
-    My Dearest Love,<br><br>
-    Today, I celebrate the most beautiful person in my life — YOU.  
-    Every moment with you feels like a dream I never want to wake up from.  
-    Your smile lights up my darkest days, your laughter is the sweetest melody,  
-    and your heart is the warmest home I have ever known.<br><br>
-    From the first time I saw you, I knew my life had changed forever.  
-    Every memory we’ve created, every secret we’ve shared,  
-    has woven a tapestry of love that I cherish more than words can say.<br><br>
-    On this special day, I want to promise you:  
-    I will stand by you through every joy and every challenge.  
-    I will make you laugh when you feel down,  
-    hold you when you’re tired,  
-    and love you more deeply with every heartbeat.<br><br>
-    Happy birthday, my everything.  
-    May your day be filled with as much love, laughter, and magic as you bring into my life.  
-    I love you, today, tomorrow, and forever. ❤️
-  </div>
+<!-- Cake -->
+<div id="cake">🎂 Happy Birthday, My Love! 🎂</div>
 
-  <!-- Photo Gallery -->
-  <div id="photo-gallery">
-    <img src="Snapchat-1775830341.jpg" alt="Photo 1">
-    <img src="Snapchat-623184945.jpg" alt="Photo 2">
-    <img src="Snapchat-633539785.jpg" alt="Photo 3">
-    <img src="Snapchat-862474648.jpg" alt="Photo 4">
-    <img src="Snapchat-906250885.jpg" alt="Photo 5">
-    <img src="Snapchat-992496995.jpg" alt="Photo 6">
-  </div>
+<!-- Love Letter -->
+<div id="love-letter">
+My Dearest Love,<br><br>
+Today, I celebrate the most beautiful person in my life — YOU.  
+Every moment with you feels like a dream I never want to wake up from.  
+Your smile lights up my darkest days, your laughter is the sweetest melody,  
+and your heart is the warmest home I have ever known.<br><br>
+From the first time I saw you, I knew my life had changed forever.  
+Every memory we’ve created, every secret we’ve shared,  
+has woven a tapestry of love that I cherish more than words can say.<br><br>
+On this special day, I want to promise you:  
+I will stand by you through every joy and every challenge.  
+I will make you laugh when you feel down, hold you when you’re tired,  
+and love you more deeply with every heartbeat.<br><br>
+Happy birthday, my everything.  
+May your day be filled with as much love, laughter, and magic as you bring into my life.  
+I love you, today, tomorrow, and forever. ❤️
+</div>
 
-  <!-- Optional Video -->
-  <div id="videos">
-    <!-- Add your video files here if you want -->
-    <!-- Example:
-    <video controls width="320">
-      <source src="video1.mp4" type="video/mp4">
-    </video>
-    -->
-  </div>
+<!-- Photo Gallery -->
+<div id="photo-gallery">
+  <img src="Snapchat-1775830341.jpg" alt="Photo 1">
+  <img src="Snapchat-623184945.jpg" alt="Photo 2">
+  <img src="Snapchat-633539785.jpg" alt="Photo 3">
+  <img src="Snapchat-862474648.jpg" alt="Photo 4">
+  <img src="Snapchat-906250885.jpg" alt="Photo 5">
+  <img src="Snapchat-992496995.jpg" alt="Photo 6">
+</div>
 
-  <!-- Fireworks Canvas -->
-  <canvas id="fireworks"></canvas>
+<script>
+// Floating hearts
+function createHeart() {
+  const heart = document.createElement('div');
+  heart.className = 'heart';
+  heart.style.left = Math.random() * window.innerWidth + 'px';
+  heart.style.animationDuration = (5 + Math.random()*3) + 's';
+  document.body.appendChild(heart);
+  setTimeout(()=> heart.remove(), 7000);
+}
+setInterval(createHeart, 400);
 
-  <script>
-    // Heart floating effect
-    function createHeart() {
-      const heart = document.createElement('div');
-      heart.className = 'heart';
-      heart.style.left = Math.random() * window.innerWidth + 'px';
-      heart.style.animationDuration = (3 + Math.random() * 2) + 's';
-      document.body.appendChild(heart);
-      setTimeout(()=> heart.remove(), 5000);
-    }
-    setInterval(createHeart, 300);
+// Fireworks
+const canvas = document.getElementById('fireworks');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
 
-    // Simple fireworks effect
-    const canvas = document.getElementById('fireworks');
-    const ctx = canvas.getContext('2d');
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    let fireworks = [];
-
-    function Firework() {
-      this.x = Math.random() * canvas.width;
-      this.y = canvas.height;
-      this.targetY = Math.random() * canvas.height / 2;
-      this.color = `hsl(${Math.random()*360},100%,50%)`;
-      this.particles = [];
-    }
-    Firework.prototype.update = function() {
-      this.y -= 5;
-      if(this.y <= this.targetY && this.particles.length === 0) {
-        for(let i=0;i<30;i++){
-          this.particles.push({
-            x:this.x,
-            y:this.y,
-            vx:Math.random()*4-2,
-            vy:Math.random()*-4,
-            alpha:1
-          });
-        }
-      }
-      this.particles.forEach(p=>{
-        p.x += p.vx;
-        p.y += p.vy;
-        p.vy += 0.05;
-        p.alpha -= 0.02;
-      });
-      this.particles = this.particles.filter(p=>p.alpha>0);
-    }
-    Firework.prototype.draw = function() {
-      this.particles.forEach(p=>{
-        ctx.fillStyle = `hsla(${Math.random()*360},100%,50%,${p.alpha})`;
-        ctx.fillRect(p.x,p.y,2,2);
+let fireworks = [];
+function Firework() {
+  this.x = Math.random() * canvas.width;
+  this.y = canvas.height;
+  this.targetY = Math.random() * canvas.height/2;
+  this.particles = [];
+}
+Firework.prototype.update = function() {
+  this.y -= 5;
+  if(this.y <= this.targetY && this.particles.length===0){
+    for(let i=0;i<30;i++){
+      this.particles.push({
+        x:this.x,
+        y:this.y,
+        vx:Math.random()*6-3,
+        vy:Math.random()*-5,
+        alpha:1
       });
     }
-
-    function animate() {
-      ctx.clearRect(0,0,canvas.width,canvas.height);
-      if(Math.random()<0.05) fireworks.push(new Firework());
-      fireworks.forEach(f=>{
-        f.update();
-        f.draw();
-      });
-      fireworks = fireworks.filter(f=>f.particles.length>0);
-      requestAnimationFrame(animate);
-    }
-    animate();
-  </script>
+  }
+  this.particles.forEach(p=>{
+    p.x += p.vx;
+    p.y += p.vy;
+    p.vy += 0.05;
+    p.alpha -= 0.02;
+  });
+  this.particles = this.particles.filter(p=>p.alpha>0);
+}
+Firework.prototype.draw = function() {
+  this.particles.forEach(p=>{
+    ctx.fillStyle = `hsla(${Math.random()*360},100%,50%,${p.alpha})`;
+    ctx.fillRect(p.x,p.y,2,2);
+  });
+}
+function animate(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  if(Math.random()<0.07) fireworks.push(new Firework());
+  fireworks.forEach(f=>{
+    f.update();
+    f.draw();
+  });
+  fireworks = fireworks.filter(f=>f.particles.length>0);
+  requestAnimationFrame(animate);
+}
+animate();
+</script>
 
 </body>
 </html>

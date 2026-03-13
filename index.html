@@ -8,9 +8,10 @@
 body {
   margin:0;
   font-family: 'Arial', sans-serif;
-  background: #ffeef7;
   overflow-x: hidden;
   text-align: center;
+  background: linear-gradient(120deg, #ffeef7, #fff0f5);
+  transition: background 5s ease;
 }
 
 /* Fireworks canvas */
@@ -22,6 +23,22 @@ body {
   height:100%;
   pointer-events:none;
   z-index:1;
+}
+
+/* Twinkling stars */
+.star {
+  position: fixed;
+  background: white;
+  border-radius: 50%;
+  width:2px;
+  height:2px;
+  opacity:0.8;
+  z-index:0;
+  animation: twinkle 3s infinite;
+}
+@keyframes twinkle {
+  0%, 100% {opacity:0.2;}
+  50% {opacity:1;}
 }
 
 /* Floating hearts */
@@ -67,7 +84,7 @@ body {
   100% {transform: translateY(-110vh);}
 }
 
-/* Cake */
+/* Cake with pulsing hearts */
 #cake {
   position: relative;
   font-size: 60px;
@@ -75,6 +92,39 @@ body {
   z-index:4;
   opacity:0;
   animation: fadeIn 3s forwards;
+}
+#cake::after {
+  content:"❤️";
+  position:absolute;
+  top:-20px; left:50%;
+  transform:translateX(-50%);
+  font-size:40px;
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%, 100% {transform: translateX(-50%) scale(1);}
+  50% {transform: translateX(-50%) scale(1.3);}
+}
+
+/* Envelope */
+#envelope {
+  width:100px;
+  height:70px;
+  background:#f99;
+  margin:50px auto;
+  border-radius:8px;
+  position:relative;
+  z-index:4;
+  opacity:0;
+  animation: fadeIn 2s forwards 2s;
+}
+#envelope::before {
+  content:'';
+  position:absolute;
+  top:0; left:0;
+  width:100px; height:70px;
+  background:#f66;
+  clip-path: polygon(0 0, 50% 50%, 100% 0);
 }
 
 /* Love letter */
@@ -90,7 +140,7 @@ body {
   box-shadow:0 0 30px rgba(255,0,100,0.3);
   display:inline-block;
   opacity:0;
-  animation: fadeIn 6s forwards 3s;
+  animation: fadeIn 6s forwards 4s;
   line-height:1.6;
   z-index:4;
   position: relative;
@@ -115,23 +165,10 @@ body {
   transform: translateY(30px);
   animation-fill-mode: forwards;
 }
-.fade-top {
-  animation: fadeMoveTop 1s ease forwards;
-}
-.fade-bottom {
-  animation: fadeMoveBottom 1s ease forwards;
-}
-
-@keyframes fadeMoveTop {
-  from {opacity:0; transform: translateY(-30px);}
-  to {opacity:1; transform: translateY(0);}
-}
-@keyframes fadeMoveBottom {
-  from {opacity:0; transform: translateY(30px);}
-  to {opacity:1; transform: translateY(0);}
-}
-
-/* Stagger photo animations */
+.fade-top { animation: fadeMoveTop 1s ease forwards; }
+.fade-bottom { animation: fadeMoveBottom 1s ease forwards; }
+@keyframes fadeMoveTop { from{opacity:0; transform:translateY(-30px);} to{opacity:1; transform:translateY(0);} }
+@keyframes fadeMoveBottom { from{opacity:0; transform:translateY(30px);} to{opacity:1; transform:translateY(0);} }
 #photo-gallery img:nth-child(1){animation-delay:9s;}
 #photo-gallery img:nth-child(2){animation-delay:9.8s;}
 #photo-gallery img:nth-child(3){animation-delay:10.6s;}
@@ -139,16 +176,23 @@ body {
 #photo-gallery img:nth-child(5){animation-delay:12.2s;}
 #photo-gallery img:nth-child(6){animation-delay:13s;}
 
-/* Fade-in animation */
 @keyframes fadeIn { from{opacity:0;} to{opacity:1;} }
 </style>
 </head>
 <body>
 
+<!-- Fireworks canvas -->
 <canvas id="fireworks"></canvas>
 
+<!-- Twinkling stars will be created via JS -->
+
+<!-- Cake -->
 <div id="cake">🎂 Happy Birthday, My Love! 🎂</div>
 
+<!-- Envelope -->
+<div id="envelope"></div>
+
+<!-- Love letter -->
 <div id="love-letter">
 My Dearest Love,<br><br>
 Today, I celebrate the most beautiful person in my life — YOU.  
@@ -159,6 +203,7 @@ On this special day, I promise to always stand by your side,
 make you laugh, hold you close, and love you forever. ❤️
 </div>
 
+<!-- Photo gallery -->
 <div id="photo-gallery">
   <img src="Snapchat-1775830341.jpg" class="fade-top" alt="Photo 1">
   <img src="Snapchat-623184945.jpg" class="fade-bottom" alt="Photo 2">
@@ -169,80 +214,31 @@ make you laugh, hold you close, and love you forever. ❤️
 </div>
 
 <script>
-// Floating hearts
-function createHeart() {
-  const heart = document.createElement('div');
-  heart.className = 'heart';
-  heart.style.left = Math.random() * window.innerWidth + 'px';
-  heart.style.animationDuration = (5 + Math.random()*3) + 's';
-  document.body.appendChild(heart);
-  setTimeout(()=> heart.remove(), 7000);
+// Twinkling stars
+for(let i=0;i<50;i++){
+  const star=document.createElement('div');
+  star.className='star';
+  star.style.left=Math.random()*window.innerWidth+'px';
+  star.style.top=Math.random()*window.innerHeight+'px';
+  star.style.width=star.style.height=(Math.random()*2+1)+'px';
+  star.style.animationDuration=(2+Math.random()*3)+'s';
+  document.body.appendChild(star);
 }
-setInterval(createHeart, 400);
+
+// Floating hearts
+function createHeart(){const h=document.createElement('div');h.className='heart';h.style.left=Math.random()*window.innerWidth+'px';h.style.animationDuration=(5+Math.random()*3)+'s';document.body.appendChild(h);setTimeout(()=>h.remove(),7000);}setInterval(createHeart,400);
 
 // Love bubbles
-function createBubble() {
-  const bubble = document.createElement('div');
-  bubble.className = 'bubble';
-  bubble.style.left = Math.random()*window.innerWidth + 'px';
-  bubble.style.width = 10 + Math.random()*15 + 'px';
-  bubble.style.height = bubble.style.width;
-  bubble.style.animationDuration = 8 + Math.random()*4 + 's';
-  document.body.appendChild(bubble);
-  setTimeout(()=> bubble.remove(), 12000);
-}
-setInterval(createBubble, 500);
+function createBubble(){const b=document.createElement('div');b.className='bubble';b.style.left=Math.random()*window.innerWidth+'px';b.style.width=10+Math.random()*15+'px';b.style.height=b.style.width;b.style.animationDuration=8+Math.random()*4+'s';document.body.appendChild(b);setTimeout(()=>b.remove(),12000);}setInterval(createBubble,500);
 
 // Fireworks
-const canvas = document.getElementById('fireworks');
-const ctx = canvas.getContext('2d');
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-let fireworks = [];
-function Firework() {
-  this.x = Math.random() * canvas.width;
-  this.y = canvas.height;
-  this.targetY = Math.random() * canvas.height/2;
-  this.particles = [];
-}
-Firework.prototype.update = function() {
-  this.y -= 5;
-  if(this.y <= this.targetY && this.particles.length===0){
-    for(let i=0;i<40;i++){
-      this.particles.push({
-        x:this.x,
-        y:this.y,
-        vx:Math.random()*6-3,
-        vy:Math.random()*-5,
-        alpha:1
-      });
-    }
-  }
-  this.particles.forEach(p=>{
-    p.x += p.vx;
-    p.y += p.vy;
-    p.vy += 0.05;
-    p.alpha -= 0.02;
-  });
-  this.particles = this.particles.filter(p=>p.alpha>0);
-}
-Firework.prototype.draw = function() {
-  this.particles.forEach(p=>{
-    ctx.fillStyle = `hsla(${Math.random()*360},100%,50%,${p.alpha})`;
-    ctx.fillRect(p.x,p.y,2,2);
-  });
-}
-function animate(){
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  if(Math.random()<0.1) fireworks.push(new Firework());
-  fireworks.forEach(f=>{
-    f.update();
-    f.draw();
-  });
-  fireworks = fireworks.filter(f=>f.particles.length>0);
-  requestAnimationFrame(animate);
-}
-animate();
+const canvas=document.getElementById('fireworks');const ctx=canvas.getContext('2d');canvas.width=window.innerWidth;canvas.height=window.innerHeight;let fireworks=[];function Firework(){this.x=Math.random()*canvas.width;this.y=canvas.height;this.targetY=Math.random()*canvas.height/2;this.particles=[];}Firework.prototype.update=function(){this.y-=5;if(this.y<=this.targetY&&this.particles.length===0){for(let i=0;i<40;i++){this.particles.push({x:this.x,y:this.y,vx:Math.random()*6-3,vy:Math.random()*-5,alpha:1});}}this.particles.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=0.05;p.alpha-=0.02;});this.particles=this.particles.filter(p=>p.alpha>0);};Firework.prototype.draw=function(){this.particles.forEach(p=>{ctx.fillStyle=`hsla(${Math.random()*360},100%,50%,${p.alpha})`;ctx.fillRect(p.x,p.y,2,2);});};function animate(){ctx.clearRect(0,0,canvas.width,canvas.height);if(Math.random()<0.1)fireworks.push(new Firework());fireworks.forEach(f=>{f.update();f.draw();});fireworks=fireworks.filter(f=>f.particles.length>0);requestAnimationFrame(animate);}animate();
+window.addEventListener('resize',()=>{canvas.width=window.innerWidth;canvas.height=window.innerHeight;});
+
+// Optional background music
+/* Uncomment below to play music automatically
+const audio=new Audio('yourmusic.mp3');audio.loop=true;audio.play();
+*/
 </script>
 
 </body>

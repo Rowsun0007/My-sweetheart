@@ -13,30 +13,15 @@ body {
   text-align: center;
 }
 
-/* Cake in the middle at start */
-#cake {
-  position: relative;
-  top: 50px;
-  font-size: 60px;
-  opacity:0;
-  animation: fadeIn 3s forwards;
-}
-
-/* Love letter */
-#love-letter {
-  margin: 30px auto;
-  width: 90%;
-  max-width:700px;
-  background: #fff0f5;
-  border-radius:20px;
-  padding:30px;
-  font-size:22px;
-  color:#d6336c;
-  box-shadow:0 0 30px rgba(255,0,100,0.3);
-  display:inline-block;
-  opacity:0;
-  animation: fadeIn 6s forwards 3s;
-  line-height:1.6;
+/* Fireworks canvas should cover whole page */
+#fireworks {
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  pointer-events:none;
+  z-index:1;
 }
 
 /* Floating hearts */
@@ -47,7 +32,7 @@ body {
   background: red;
   transform: rotate(45deg);
   animation: floatUp 7s linear infinite;
-  z-index:999;
+  z-index:3;
 }
 .heart:before, .heart:after {
   content:"";
@@ -65,13 +50,33 @@ body {
   100% {transform: translateY(-900px) rotate(45deg); opacity:0;}
 }
 
-/* Fireworks canvas */
-#fireworks {
-  position:fixed;
-  top:0; left:0;
-  width:100%; height:100%;
-  pointer-events:none;
-  z-index:998;
+/* Cake */
+#cake {
+  position: relative;
+  font-size: 60px;
+  margin-top:50px;
+  z-index:2;
+  opacity:0;
+  animation: fadeIn 3s forwards;
+}
+
+/* Love letter */
+#love-letter {
+  margin: 30px auto;
+  width: 90%;
+  max-width:700px;
+  background: rgba(255, 240, 245, 0.9);
+  border-radius:20px;
+  padding:30px;
+  font-size:22px;
+  color:#d6336c;
+  box-shadow:0 0 30px rgba(255,0,100,0.3);
+  display:inline-block;
+  opacity:0;
+  animation: fadeIn 6s forwards 3s;
+  line-height:1.6;
+  z-index:2;
+  position: relative;
 }
 
 /* Photo gallery */
@@ -82,7 +87,9 @@ body {
   justify-content:center;
   margin:30px auto;
   opacity:0;
-  animation: fadeIn 5s forwards 9s; /* fade in after love letter */
+  animation: fadeIn 5s forwards 9s;
+  z-index:2;
+  position: relative;
 }
 #photo-gallery img {
   width:200px;
@@ -99,32 +106,20 @@ body {
 </head>
 <body>
 
-<!-- Fireworks Canvas -->
 <canvas id="fireworks"></canvas>
 
-<!-- Cake -->
 <div id="cake">🎂 Happy Birthday, My Love! 🎂</div>
 
-<!-- Love Letter -->
 <div id="love-letter">
 My Dearest Love,<br><br>
 Today, I celebrate the most beautiful person in my life — YOU.  
 Every moment with you feels like a dream I never want to wake up from.  
 Your smile lights up my darkest days, your laughter is the sweetest melody,  
 and your heart is the warmest home I have ever known.<br><br>
-From the first time I saw you, I knew my life had changed forever.  
-Every memory we’ve created, every secret we’ve shared,  
-has woven a tapestry of love that I cherish more than words can say.<br><br>
-On this special day, I want to promise you:  
-I will stand by you through every joy and every challenge.  
-I will make you laugh when you feel down, hold you when you’re tired,  
-and love you more deeply with every heartbeat.<br><br>
-Happy birthday, my everything.  
-May your day be filled with as much love, laughter, and magic as you bring into my life.  
-I love you, today, tomorrow, and forever. ❤️
+On this special day, I promise to always stand by your side,  
+make you laugh, hold you close, and love you forever. ❤️
 </div>
 
-<!-- Photo Gallery -->
 <div id="photo-gallery">
   <img src="Snapchat-1775830341.jpg" alt="Photo 1">
   <img src="Snapchat-623184945.jpg" alt="Photo 2">

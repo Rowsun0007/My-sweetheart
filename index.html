@@ -13,7 +13,7 @@ body {
   text-align: center;
 }
 
-/* Fireworks canvas should cover whole page */
+/* Fireworks canvas */
 #fireworks {
   position:fixed;
   top:0;
@@ -50,12 +50,29 @@ body {
   100% {transform: translateY(-900px) rotate(45deg); opacity:0;}
 }
 
+/* Love bubbles */
+.bubble {
+  position: fixed;
+  bottom: -50px;
+  width: 15px;
+  height: 15px;
+  background: pink;
+  border-radius: 50%;
+  opacity: 0.7;
+  z-index:2;
+  animation: rise 10s linear infinite;
+}
+@keyframes rise {
+  0% {transform: translateY(0);}
+  100% {transform: translateY(-110vh);}
+}
+
 /* Cake */
 #cake {
   position: relative;
   font-size: 60px;
   margin-top:50px;
-  z-index:2;
+  z-index:4;
   opacity:0;
   animation: fadeIn 3s forwards;
 }
@@ -75,7 +92,7 @@ body {
   opacity:0;
   animation: fadeIn 6s forwards 3s;
   line-height:1.6;
-  z-index:2;
+  z-index:4;
   position: relative;
 }
 
@@ -86,9 +103,7 @@ body {
   gap:10px;
   justify-content:center;
   margin:30px auto;
-  opacity:0;
-  animation: fadeIn 5s forwards 9s;
-  z-index:2;
+  z-index:4;
   position: relative;
 }
 #photo-gallery img {
@@ -96,9 +111,33 @@ body {
   height:auto;
   border-radius:10px;
   box-shadow:0 0 15px rgba(0,0,0,0.2);
-  transition: transform 0.5s;
+  opacity:0;
+  transform: translateY(30px);
+  animation-fill-mode: forwards;
 }
-#photo-gallery img:hover {transform:scale(1.05);}
+.fade-top {
+  animation: fadeMoveTop 1s ease forwards;
+}
+.fade-bottom {
+  animation: fadeMoveBottom 1s ease forwards;
+}
+
+@keyframes fadeMoveTop {
+  from {opacity:0; transform: translateY(-30px);}
+  to {opacity:1; transform: translateY(0);}
+}
+@keyframes fadeMoveBottom {
+  from {opacity:0; transform: translateY(30px);}
+  to {opacity:1; transform: translateY(0);}
+}
+
+/* Stagger photo animations */
+#photo-gallery img:nth-child(1){animation-delay:9s;}
+#photo-gallery img:nth-child(2){animation-delay:9.8s;}
+#photo-gallery img:nth-child(3){animation-delay:10.6s;}
+#photo-gallery img:nth-child(4){animation-delay:11.4s;}
+#photo-gallery img:nth-child(5){animation-delay:12.2s;}
+#photo-gallery img:nth-child(6){animation-delay:13s;}
 
 /* Fade-in animation */
 @keyframes fadeIn { from{opacity:0;} to{opacity:1;} }
@@ -121,12 +160,12 @@ make you laugh, hold you close, and love you forever. ❤️
 </div>
 
 <div id="photo-gallery">
-  <img src="Snapchat-1775830341.jpg" alt="Photo 1">
-  <img src="Snapchat-623184945.jpg" alt="Photo 2">
-  <img src="Snapchat-633539785.jpg" alt="Photo 3">
-  <img src="Snapchat-862474648.jpg" alt="Photo 4">
-  <img src="Snapchat-906250885.jpg" alt="Photo 5">
-  <img src="Snapchat-992496995.jpg" alt="Photo 6">
+  <img src="Snapchat-1775830341.jpg" class="fade-top" alt="Photo 1">
+  <img src="Snapchat-623184945.jpg" class="fade-bottom" alt="Photo 2">
+  <img src="Snapchat-633539785.jpg" class="fade-top" alt="Photo 3">
+  <img src="Snapchat-862474648.jpg" class="fade-bottom" alt="Photo 4">
+  <img src="Snapchat-906250885.jpg" class="fade-top" alt="Photo 5">
+  <img src="Snapchat-992496995.jpg" class="fade-bottom" alt="Photo 6">
 </div>
 
 <script>
@@ -141,12 +180,24 @@ function createHeart() {
 }
 setInterval(createHeart, 400);
 
+// Love bubbles
+function createBubble() {
+  const bubble = document.createElement('div');
+  bubble.className = 'bubble';
+  bubble.style.left = Math.random()*window.innerWidth + 'px';
+  bubble.style.width = 10 + Math.random()*15 + 'px';
+  bubble.style.height = bubble.style.width;
+  bubble.style.animationDuration = 8 + Math.random()*4 + 's';
+  document.body.appendChild(bubble);
+  setTimeout(()=> bubble.remove(), 12000);
+}
+setInterval(createBubble, 500);
+
 // Fireworks
 const canvas = document.getElementById('fireworks');
 const ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
-
 let fireworks = [];
 function Firework() {
   this.x = Math.random() * canvas.width;
@@ -157,7 +208,7 @@ function Firework() {
 Firework.prototype.update = function() {
   this.y -= 5;
   if(this.y <= this.targetY && this.particles.length===0){
-    for(let i=0;i<30;i++){
+    for(let i=0;i<40;i++){
       this.particles.push({
         x:this.x,
         y:this.y,
@@ -183,7 +234,7 @@ Firework.prototype.draw = function() {
 }
 function animate(){
   ctx.clearRect(0,0,canvas.width,canvas.height);
-  if(Math.random()<0.07) fireworks.push(new Firework());
+  if(Math.random()<0.1) fireworks.push(new Firework());
   fireworks.forEach(f=>{
     f.update();
     f.draw();
